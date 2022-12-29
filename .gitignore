@@ -1,2 +1,3 @@
 equi_latte_chess
 srcs/*.o
+srcs/**/*.o
