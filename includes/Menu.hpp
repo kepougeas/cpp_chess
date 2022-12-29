@@ -15,20 +15,20 @@
 class Menu
 {
 public:
-    Menu(sf::RenderWindow *window, int *state);
-    ~Menu();
+    Menu(sf::RenderWindow *, int *);
+    ~Menu() = default;
 
     void drawMenu();
     void checkClickEvents();
 
  private:
-    sf::RenderWindow *window;
-    int *state;
+    sf::RenderWindow *_window;
+    int *_state;
 
-    sf::Font fontTitle;
-    sf::Font fontMenu;
+    sf::Font _fontTitle;
+    sf::Font _fontMenu;
 
-    sf::Text title;
-    sf::Text playEntry;
-    sf::Text exitEntry;
+    sf::Text _title;
+    sf::Text _playEntry;
+    sf::Text _exitEntry;
 };

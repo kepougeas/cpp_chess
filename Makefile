@@ -13,7 +13,13 @@ RM = rm -f
 NAME = equi_latte_chess
 
 SRC =	srcs/main.cpp \
-		srcs/Menu.cpp
+		srcs/Menu.cpp \
+		srcs/Game.cpp \
+		srcs/pieces/Pawn.cpp \
+		srcs/pieces/Bishop.cpp \
+		srcs/pieces/Rook.cpp \
+		srcs/pieces/Knight.cpp \
+		srcs/pieces/Queen.cpp
 	
 OBJ = $(SRC:.cpp=.o)
 
