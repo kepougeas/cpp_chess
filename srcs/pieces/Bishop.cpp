@@ -21,32 +21,46 @@ std::vector<boardPos> Bishop::getPossibleMoves()
 {
     std::vector<boardPos> possibleMoves;
     boardPos checkedPos;
+    char posCheckerRet;
 
     checkedPos = this->_position;
     // A Bishop can move diagonally in both directions.
     // Checking all diagonals
     while (++checkedPos.x <= 7 && ++checkedPos.y <= 7 &&
-            this->_currentGame->isPositionFree(checkedPos, this->_color))
+            (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color)))
     {
         possibleMoves.push_back(checkedPos);
+        // We cannot get past more than one enemy
+        if (posCheckerRet == 1) {
+            break;
+        }
     }
     checkedPos = this->_position;
     while(++checkedPos.x <= 7 && --checkedPos.y >= 0 &&
-            this->_currentGame->isPositionFree(checkedPos, this->_color))
+            (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color)))
     {
         possibleMoves.push_back(checkedPos);
+        if (posCheckerRet == 1) {
+            break;
+        }
     }
     checkedPos = this->_position;
     while (--checkedPos.x >= 0 && --checkedPos.y >= 0 &&
-            this->_currentGame->isPositionFree(checkedPos, this->_color))
+            (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color)))
     {
         possibleMoves.push_back(checkedPos);
+        if (posCheckerRet == 1) {
+            break;
+        }
     }
     checkedPos = this->_position;
     while (--checkedPos.x >= 0 && ++checkedPos.y >= 0 &&
-            this->_currentGame->isPositionFree(checkedPos, this->_color))
+            (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color)))
     {
         possibleMoves.push_back(checkedPos);
+        if (posCheckerRet == 1) {
+            break;
+        }
     }
 
     return possibleMoves;

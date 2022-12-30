@@ -89,6 +89,7 @@ bool Knight::move(boardPos destPos)
     }
 
     this->_position = destPos;
+    printf("Piece %s is moving to [X = %i ; Y = %i]\n", enumPieceName[this->_name], this->_position.x, this->_position.y);
 
     return true;
 }

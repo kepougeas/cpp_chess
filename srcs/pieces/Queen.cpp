@@ -21,50 +21,80 @@ std::vector<boardPos> Queen::getPossibleMoves()
 {
     std::vector<boardPos> possibleMoves;
     boardPos checkedPos;
+    char posCheckerRet;
 
     checkedPos = this->_position;
     // A Queen can move diagonally and horizontally in both directions.
     // Checking all diagonals
     while (++checkedPos.x <= 7 && ++checkedPos.y <= 7 &&
-            this->_currentGame->isPositionFree(checkedPos, this->_color))
+            (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color)))
     {
         possibleMoves.push_back(checkedPos);
+        // Cannot move past more than one ennemy
+        if (posCheckerRet == 1) {
+            break;
+        }
     }
     checkedPos = this->_position;
     while(++checkedPos.x <= 7 && --checkedPos.y >= 0 &&
-            this->_currentGame->isPositionFree(checkedPos, this->_color))
+            (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color)))
     {
         possibleMoves.push_back(checkedPos);
+        if (posCheckerRet == 1) {
+            break;
+        }
     }
     checkedPos = this->_position;
     while (--checkedPos.x >= 0 && --checkedPos.y >= 0 &&
-            this->_currentGame->isPositionFree(checkedPos, this->_color))
+            (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color)))
     {
         possibleMoves.push_back(checkedPos);
+        if (posCheckerRet == 1) {
+            break;
+        }
     }
     checkedPos = this->_position;
     while (--checkedPos.x >= 0 && ++checkedPos.y >= 0 &&
-            this->_currentGame->isPositionFree(checkedPos, this->_color))
+            (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color)))
     {
         possibleMoves.push_back(checkedPos);
+        if (posCheckerRet == 1) {
+            break;
+        }
     }
 
     // Checking all straight lines
     checkedPos = this->_position;
-    while (++checkedPos.x <= 7 && this->_currentGame->isPositionFree(checkedPos, this->_color)) {
+    while (++checkedPos.x <= 7 &&
+            (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color))) {
         possibleMoves.push_back(checkedPos);
+        if (posCheckerRet == 1) {
+            break;
+        }
     }
     checkedPos = this->_position;
-    while(++checkedPos.y <= 7 && this->_currentGame->isPositionFree(checkedPos, this->_color)) {
+    while(++checkedPos.y <= 7 && 
+            (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color))) {
         possibleMoves.push_back(checkedPos);
+        if (posCheckerRet == 1) {
+            break;
+        }
     }
     checkedPos = this->_position;
-    while (--checkedPos.x >= 0 && this->_currentGame->isPositionFree(checkedPos, this->_color)) {
+    while (--checkedPos.x >= 0 && 
+            (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color))) {
         possibleMoves.push_back(checkedPos);
+        if (posCheckerRet == 1) {
+            break;
+        }
     }
     checkedPos = this->_position;
-    while (--checkedPos.y >= 0 && this->_currentGame->isPositionFree(checkedPos, this->_color)) {
+    while (--checkedPos.y >= 0 && 
+            (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color))) {
         possibleMoves.push_back(checkedPos);
+        if (posCheckerRet == 1) {
+            break;
+        }
     }
 
     return possibleMoves;

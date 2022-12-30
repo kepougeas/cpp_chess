@@ -2,34 +2,15 @@
 
 #include "IPiece.hpp"
 
+// TODO: checkMateChecker
+// TODO: possibleMoves behavior in case of king trouble
 
-// CHESS BOARD OVERVIEW
-//
-//     0   1   2   3   4   5   6   7
-//   |---------------------------------> Xaxis
-// 0 8   |   |   |   |   |   |   |   |
-//   |--------------------------------     BLACK
-// 1 7   |   |   |   |   |   |   |   |            P = Pawn
-//   |--------------------------------            R = Rook
-// 2 6 bP|   |wB | wQ|   |   |   |   |            Kn = Knight
-//   |--------------------------------            B = Bishop
-// 3 5   |   |   |bKn|   |   |   |   |            Q = Queen
-//   |--------------------------------            K = King
-// 4 4   |   |   |wR |wP |   |   |   |
-//   |--------------------------------
-// 5 3   |   |   |   |   |   |   |   |
-//   |--------------------------------
-// 6 2   |   |   |   |   |   |   |   |
-//   |--------------------------------     WHITE
-// 7 1 bK|   |   |   |   |   |   |   |
-//   |-A---B---C---D---E---F---G---H--
-//   |
-//   v
-// Yaxis
+// TODO: en passant
+// TODO: promote
+// TODO: castling
 
-
-
-
+// TODO: capture history for each player
+// TODO: side display of chess compliant indexes
 
 // CHESS BOARD OVERVIEW
 //
@@ -63,11 +44,12 @@ public:
     void addPiece(IPiece *piece) { this->_gamePieces.push_back(piece); };
     void removePiece(IPiece *piece);
     void printAllPieces() { for(IPiece *piece : this->_gamePieces) {piece->printPosition();} };
-    bool isPositionFree(boardPos, ColorName);
+    char isPositionFree(boardPos, ColorName);
     IPiece *getPieceOfPos(boardPos);
     IPiece *getSelectedPiece() { return this->_selectedPiece; };
-    void   setSelectedPiece(IPiece *piece) { this->_selectedPiece = piece; };
+    void setSelectedPiece(IPiece *piece) { this->_selectedPiece = piece; };
     ColorName getCurrentPlayer() { return this->_currentPlayer; };
+    void finishTurn() { this->_currentPlayer = this->_currentPlayer == WHITE ? BLACK : WHITE; };
 private:
     std::vector<IPiece *> _gamePieces;
     ColorName             _currentPlayer;

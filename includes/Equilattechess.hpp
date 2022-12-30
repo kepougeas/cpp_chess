@@ -9,6 +9,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Mouse.hpp>
+#include <unistd.h>
 #include <cstdio>
 #include <cstdlib>
 #include <exception>

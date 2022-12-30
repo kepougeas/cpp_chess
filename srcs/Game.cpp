@@ -1,4 +1,5 @@
 #include "../includes/Equilattechess.hpp"
+#include <cstddef>
 #include <iterator>
 #include <type_traits>
 #include <vector>
@@ -14,24 +15,27 @@ Game::~Game()
     this->_gamePieces.clear();
 }
 
-bool Game::isPositionFree(boardPos toCheck, ColorName colorOfChecker)
+// Function returns 0 for non free position (same color or out of bound)
+//                  1 for attackable position (enemy color)
+//                  2 for free position
+char Game::isPositionFree(boardPos toCheck, ColorName colorOfChecker)
 {
     boardPos currPos;
+    IPiece *pieceToDest;
 
     // Obviously cannot move outside the board
     if (toCheck.x < 0 || toCheck.x > 7 || toCheck.y < 0 || toCheck.y > 7) {
-        return false;
+        return 0;
     }
 
-    for(IPiece *piece : this->_gamePieces)
-    {
-        currPos = piece->getPosition();
-        if (currPos == toCheck && this->getPieceOfPos(currPos)->getColor() == colorOfChecker) {
-            return false;
-        }
+    // Position is empty
+    pieceToDest = this->getPieceOfPos(toCheck);
+    if (pieceToDest == nullptr) {
+        return 2;
     }
 
-    return true;
+    // If same color, non free. Attackable position otherwise.
+    return pieceToDest->getColor() == colorOfChecker ? 0 : 1;
 }
 
 IPiece *Game::getPieceOfPos(boardPos toGet)

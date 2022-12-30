@@ -2,6 +2,7 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <cstddef>
 
 Board::Board(sf::RenderWindow *window, Game *currentGame, int *state)
 {
@@ -67,12 +68,24 @@ void Board::drawBoard()
     if ((piece = this->_currentGame->getSelectedPiece()) != nullptr) {
         sf::RectangleShape selectSquare(sf::Vector2f(100, 100));
         boardPos piecePos = piece->getPosition();
+        std::vector<boardPos> possibleMoves = piece->getPossibleMoves();
 
         selectSquare.setFillColor(sf::Color(255,255,255,0));
         selectSquare.setOutlineColor(sf::Color::Green);
         selectSquare.setOutlineThickness(10);
         selectSquare.setPosition(piecePos.y * 120 + 10, piecePos.x * 120 + 10);
         this->_window->draw(selectSquare);
+
+        for (boardPos currPos: possibleMoves)
+        {
+            sf::RectangleShape possibleMoveSquare(sf::Vector2f(100, 100));
+            
+            possibleMoveSquare.setFillColor(sf::Color(255, 255, 255, 0));
+            possibleMoveSquare.setOutlineColor(sf::Color::Blue);
+            possibleMoveSquare.setOutlineThickness(10);
+            possibleMoveSquare.setPosition(currPos.y * 120 + 10, currPos.x * 120 + 10);
+            this->_window->draw(possibleMoveSquare);
+        }
     }
 
     this->checkClickEvents();
@@ -82,6 +95,9 @@ void Board::checkClickEvents()
 {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
+        // Quick sleep to prevent annoying multiple clicking
+        usleep(100000);
+
         sf::Vector2i clicPosition = sf::Mouse::getPosition(*this->_window);
         sf::Vector2f exitButtonPosition = this->_exitButton.getPosition();
         sf::FloatRect exitButtonSize = this->_exitButton.getGlobalBounds();
@@ -96,19 +112,43 @@ void Board::checkClickEvents()
             *this->_state = EXIT_STATE;
         }
 
+        // If there is no selected piece
+        if ((clickedPiece = this->_currentGame->getSelectedPiece()) == nullptr) {
         //Check for a piece click
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                checkedPiecePos = this->_chessSquares[i][j].getPosition();
-                checkedPosSize = this->_chessSquares[i][j].getGlobalBounds();
-                if ((clicPosition.x > checkedPiecePos.x && clicPosition.x < (checkedPiecePos.x + checkedPosSize.width))
-                && (clicPosition.y > checkedPiecePos.y && clicPosition.y < (checkedPiecePos.y + checkedPosSize.height)))
-                {
-                    // We clicked on a piece
-                    clickedPiece = this->_currentGame->getPieceOfPos({.x = i, .y = j});
-                    this->_currentGame->setSelectedPiece(clickedPiece);
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    checkedPiecePos = this->_chessSquares[i][j].getPosition();
+                    checkedPosSize = this->_chessSquares[i][j].getGlobalBounds();
+                    if ((clicPosition.x > checkedPiecePos.x && clicPosition.x < (checkedPiecePos.x + checkedPosSize.width))
+                    && (clicPosition.y > checkedPiecePos.y && clicPosition.y < (checkedPiecePos.y + checkedPosSize.height)))
+                    {
+                        // We clicked on a piece
+                        clickedPiece = this->_currentGame->getPieceOfPos({.x = i, .y = j});
+                        // If this is the right player then we can select
+                        if (clickedPiece == nullptr ||
+                        this->_currentGame->getCurrentPlayer() == clickedPiece->getColor()) {
+                            this->_currentGame->setSelectedPiece(clickedPiece);
+                        }
+                    }
                 }
             }
+        }
+        // Check for click on possible moves (unselect piece if outside of possible moves)
+        else {
+            std::vector<boardPos> possibleMoves = clickedPiece->getPossibleMoves();
+
+            // We check if clic happened in any of the possible moves area
+            for (boardPos currPos : possibleMoves) {
+                // Tricky reversed indexes (sub optimal for understanding but I have time constraint)
+                if ((clicPosition.x > (currPos.y * 120) && clicPosition.x < (currPos.y * 120 + 120))
+                && (clicPosition.y > (currPos.x * 120) && clicPosition.y < (currPos.x * 120 + 120)))
+                {
+                    // Clic happened on a possible move, so we move the piece
+                    clickedPiece->move(currPos);
+                    this->_currentGame->finishTurn();
+                }
+            }
+            this->_currentGame->setSelectedPiece(nullptr);
         }
     }
 }

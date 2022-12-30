@@ -22,29 +22,28 @@ std::vector<boardPos> Pawn::getPossibleMoves()
 {
     std::vector<boardPos> possibleMoves;
     boardPos defaultMove;
+    char posCheckerRet;
 
     // A pawn can only move forward, except on its first move.
 
     // Default move
     if (this->_color == BLACK) {
             defaultMove = {
-                .x = this->_position.x,
-                .y = this->_position.y + 1
+                .x = this->_position.x + 1,
+                .y = this->_position.y
             };
     }
     else {
         // if White we decrease the index
         defaultMove = {
-            .x = this->_position.x,
-            .y = this->_position.y - 1
+            .x = this->_position.x - 1,
+            .y = this->_position.y
         };
     }
 
-    if (this->_currentGame->isPositionFree(defaultMove, this->_color)) {
+    // Can only move this way if the position is absolutely empty.
+    if (this->_currentGame->isPositionFree(defaultMove, this->_color) == 2) {
         possibleMoves.push_back(defaultMove);
-    }
-    else {
-        return possibleMoves;
     }
 
     // Check if pawn is on first move
@@ -54,21 +53,56 @@ std::vector<boardPos> Pawn::getPossibleMoves()
         if (this->_color == BLACK) {
             // if Black we increase the index on the board
             pos = {
-                .x = this->_position.x,
-                .y = this->_position.y + 2
+                .x = this->_position.x + 2,
+                .y = this->_position.y
             };
         }
         else {
             // if White we decrease the index
             pos = {
-                .x = this->_position.x,
-                .y = this->_position.y - 2
+                .x = this->_position.x - 2,
+                .y = this->_position.y
             };
         }
 
-        if (this->_currentGame->isPositionFree(pos, this->_color)) {
+        // Same, can only move forward if position is empty
+        if (this->_currentGame->isPositionFree(pos, this->_color) == 2) {
                 possibleMoves.push_back(pos);
             }
+    }
+
+    // Checking attacks now, Pawns can only attack diagonally
+    if (this->_color == BLACK) {
+        defaultMove = {
+            .x = this->_position.x + 1,
+            .y = this->_position.y + 1
+        };
+        if (this->_currentGame->isPositionFree(defaultMove, this->_color) == 1) {
+            possibleMoves.push_back(defaultMove);
+        }
+        defaultMove = {
+            .x = this->_position.x + 1,
+            .y = this->_position.y - 1
+        };
+        if (this->_currentGame->isPositionFree(defaultMove, this->_color) == 1) {
+            possibleMoves.push_back(defaultMove);
+        }
+    }
+    else {
+         defaultMove = {
+            .x = this->_position.x - 1,
+            .y = this->_position.y - 1
+        };
+        if (this->_currentGame->isPositionFree(defaultMove, this->_color) == 1) {
+            possibleMoves.push_back(defaultMove);
+        }
+        defaultMove = {
+            .x = this->_position.x - 1,
+            .y = this->_position.y + 1
+        };
+        if (this->_currentGame->isPositionFree(defaultMove, this->_color) == 1) {
+            possibleMoves.push_back(defaultMove);
+        }
     }
 
     return possibleMoves;
