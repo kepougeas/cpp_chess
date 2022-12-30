@@ -3,6 +3,9 @@
 #include "Equilattechess.hpp"
 #include "IPiece.hpp"
 
+#define BLACK_KNIGHT_IMG "assets/black_knight.png"
+#define WHITE_KNIGHT_IMG "assets/white_knight.png"
+
 class Knight : public IPiece
 {
 public:

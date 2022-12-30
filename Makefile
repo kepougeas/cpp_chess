@@ -15,11 +15,13 @@ NAME = equi_latte_chess
 SRC =	srcs/main.cpp \
 		srcs/Menu.cpp \
 		srcs/Game.cpp \
+		srcs/Board.cpp \
 		srcs/pieces/Pawn.cpp \
 		srcs/pieces/Bishop.cpp \
 		srcs/pieces/Rook.cpp \
 		srcs/pieces/Knight.cpp \
-		srcs/pieces/Queen.cpp
+		srcs/pieces/Queen.cpp \
+		srcs/pieces/King.cpp
 	
 OBJ = $(SRC:.cpp=.o)
 

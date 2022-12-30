@@ -7,6 +7,11 @@ Queen::Queen(Game *currentGame, ColorName color, boardPos position)
     this->_color = color;
     this->_position = position;
     this->_name = PieceName::Queen;
+    this->_displayPiece = new sf::Texture();
+    if (!this->_displayPiece->loadFromFile(color == WHITE ? WHITE_QUEEN_IMG : BLACK_QUEEN_IMG)) {
+        printf("Error loading image for queen\n");
+        exit(1);
+    }
 }
 
 Queen::~Queen()

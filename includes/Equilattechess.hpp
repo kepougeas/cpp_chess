@@ -18,18 +18,18 @@
 #include "Game.hpp"
 #include "Menu.hpp"
 #include "IPiece.hpp"
+#include "Board.hpp"
 
 #include "Pawn.hpp"
 #include "Bishop.hpp"
 #include "Rook.hpp"
 #include "Knight.hpp"
 #include "Queen.hpp"
+#include "King.hpp"
 
 #define WINDOW_TITLE "Equi Latte Chess"
-#define WINDOW_WIDTH 1200
-#define WINDOW_HEIGHT 1024
+#define WINDOW_WIDTH 1400
+#define WINDOW_HEIGHT 1000
 #define MENU_STATE 1
 #define PLAY_STATE 2
 #define EXIT_STATE 3
-
-#define PAWN_NAME "Pawn"

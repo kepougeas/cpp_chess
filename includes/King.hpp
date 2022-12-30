@@ -3,14 +3,14 @@
 #include "Equilattechess.hpp"
 #include "IPiece.hpp"
 
-#define BLACK_ROOK_IMG "assets/black_rook.png"
-#define WHITE_ROOK_IMG "assets/white_rook.png"
+#define BLACK_KING_IMG "assets/black_king.png"
+#define WHITE_KING_IMG "assets/white_king.png"
 
-class Rook : public IPiece
+class King : public IPiece
 {
 public:
-    Rook (Game*, ColorName, boardPos);
-    virtual ~Rook();
+    King (Game*, ColorName, boardPos);
+    virtual ~King();
     virtual std::vector<boardPos> getPossibleMoves();
     virtual bool move(boardPos);
 protected:

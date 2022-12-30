@@ -21,7 +21,7 @@
 //   |--------------------------------
 // 6 2   |   |   |   |   |   |   |   |
 //   |--------------------------------     WHITE
-// 7 1   |   |   |   |   |   |   |   |
+// 7 1 bK|   |   |   |   |   |   |   |
 //   |-A---B---C---D---E---F---G---H--
 //   |
 //   v
@@ -34,7 +34,7 @@
 // CHESS BOARD OVERVIEW
 //
 //     0   1   2   3   4   5   6   7
-//   |---------------------------------> Xaxis
+//   |---------------------------------> Yaxis
 // 0 8 R | Kn| B | Q | K | B | Kn| R |
 //   |--------------------------------     BLACK
 // 1 7 P | P | P | P | P | P | P | P |            P = Pawn
@@ -53,18 +53,23 @@
 //   |-A---B---C---D---E---F---G---H--
 //   |
 //   v
-// Yaxis
+// Xaxis
 
 class Game
 {
 public:
     Game();
-    ~Game() = default;
+    ~Game();
     void addPiece(IPiece *piece) { this->_gamePieces.push_back(piece); };
     void removePiece(IPiece *piece);
     void printAllPieces() { for(IPiece *piece : this->_gamePieces) {piece->printPosition();} };
     bool isPositionFree(boardPos, ColorName);
     IPiece *getPieceOfPos(boardPos);
+    IPiece *getSelectedPiece() { return this->_selectedPiece; };
+    void   setSelectedPiece(IPiece *piece) { this->_selectedPiece = piece; };
+    ColorName getCurrentPlayer() { return this->_currentPlayer; };
 private:
     std::vector<IPiece *> _gamePieces;
+    ColorName             _currentPlayer;
+    IPiece                *_selectedPiece;
 };

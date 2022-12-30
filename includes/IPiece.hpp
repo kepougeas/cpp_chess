@@ -34,7 +34,7 @@ enum ColorName {
 class   IPiece
 {
 public:
-    virtual ~IPiece() = default;
+    ~IPiece() { delete this->_displayPiece; };
 
     virtual std::vector<boardPos> getPossibleMoves() = 0;
     virtual bool move(boardPos) = 0;
@@ -43,11 +43,13 @@ public:
     PieceName getName() { return this->_name; };
     ColorName getColor() { return this->_color; };
     void printPossibleMoves();
-    void printPosition() { printf("Piece %s is at [X = %i ; Y = %i]\n", enumPieceName[this->_name], this->_position.x, this->_position.y); };
+    void printPosition() { printf("Piece %s %s is at [X = %i ; Y = %i]\n", this->_color == WHITE ? "WHITE" : "BLACK", enumPieceName[this->_name], this->_position.x, this->_position.y); };
+    sf::Texture *getTexture() { return this->_displayPiece; };
 protected:
     PieceName        _name;
     boardPos         _position;
     ColorName        _color;
+    sf::Texture      *_displayPiece;
 };
 
 inline bool operator==(const boardPos &pos1, const boardPos &pos2)

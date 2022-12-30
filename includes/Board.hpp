@@ -1,0 +1,29 @@
+#pragma once
+
+#include "Equilattechess.hpp"
+#include "Game.hpp"
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Text.hpp>
+
+#define CURRENT_PLAYER_TEXT_WHITE "Current player is : WHITE"
+#define CURRENT_PLAYER_TEXT_BLACK "Current player is : BLACK"
+#define CURR_PLAYER_TEXT_SIZE 35
+
+class Board
+{
+public:
+    Board(sf::RenderWindow *, Game *, int *);
+    ~Board() = default;
+
+    void drawBoard();
+    void checkClickEvents();
+ private:
+    sf::RenderWindow   *_window;
+    Game               *_currentGame;
+    int                *_state;
+    sf::Font           _fontGeneral;
+    sf::Text           _exitButton;
+    sf::Text           _currentPlayerText;
+    sf::RectangleShape _chessSquares[8][8];
+};

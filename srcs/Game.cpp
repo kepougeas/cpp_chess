@@ -5,6 +5,13 @@
 
 Game::Game()
 {
+    this->_currentPlayer = WHITE;
+    this->_selectedPiece = nullptr;
+}
+
+Game::~Game()
+{
+    this->_gamePieces.clear();
 }
 
 bool Game::isPositionFree(boardPos toCheck, ColorName colorOfChecker)

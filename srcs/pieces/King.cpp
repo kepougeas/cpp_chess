@@ -1,76 +1,69 @@
 #include "../../includes/Equilattechess.hpp"
 #include <vector>
 
-Knight::Knight(Game *currentGame, ColorName color, boardPos position)
+King::King(Game *currentGame, ColorName color, boardPos position)
 {
     this->_currentGame = currentGame;
     this->_color = color;
     this->_position = position;
-    this->_name = PieceName::Knight;
+    this->_name = PieceName::King;
     this->_displayPiece = new sf::Texture();
-    if (!this->_displayPiece->loadFromFile(color == WHITE ? WHITE_KNIGHT_IMG : BLACK_KNIGHT_IMG)) {
-        printf("Error loading image for knight\n");
+    if (!this->_displayPiece->loadFromFile(color == WHITE ? WHITE_KING_IMG : BLACK_KING_IMG)) {
+        printf("Error loading image for king\n");
         exit(1);
     }
 }
 
-Knight::~Knight()
+King::~King()
 {}
 
-std::vector<boardPos> Knight::getPossibleMoves()
+std::vector<boardPos> King::getPossibleMoves()
 {
     std::vector<boardPos> possibleMoves;
-    boardPos checkedPos = this->_position;
+    boardPos checkedPos;
 
-    // Knights can jump over pieces and do an L shaped move
-    // Basically 8 moves to check
-    checkedPos.x += 1;
-    checkedPos.y -= 2;
+    // A King can only move one step in every direction.
+    checkedPos = this->_position;
+    checkedPos.x++;
     if (this->_currentGame->isPositionFree(checkedPos, this->_color)) {
         possibleMoves.push_back(checkedPos);
     }
     checkedPos = this->_position;
-    checkedPos.x -= 1;
-    checkedPos.y -= 2;
-    if (this->_currentGame->isPositionFree(checkedPos, this->_color)) {
-        possibleMoves.push_back(checkedPos);
-    }
-
-    checkedPos = this->_position;
-    checkedPos.x -= 2;
-    checkedPos.y -= 1;
+    checkedPos.x--;
     if (this->_currentGame->isPositionFree(checkedPos, this->_color)) {
         possibleMoves.push_back(checkedPos);
     }
     checkedPos = this->_position;
-    checkedPos.x -= 2;
-    checkedPos.y += 1;
-    if (this->_currentGame->isPositionFree(checkedPos, this->_color)) {
-        possibleMoves.push_back(checkedPos);
-    }
-
-    checkedPos = this->_position;
-    checkedPos.x -= 1;
-    checkedPos.y += 2;
+    checkedPos.y++;
     if (this->_currentGame->isPositionFree(checkedPos, this->_color)) {
         possibleMoves.push_back(checkedPos);
     }
     checkedPos = this->_position;
-    checkedPos.x += 1;
-    checkedPos.y += 2;
-    if (this->_currentGame->isPositionFree(checkedPos, this->_color)) {
-        possibleMoves.push_back(checkedPos);
-    }
-
-    checkedPos = this->_position;
-    checkedPos.x += 2;
-    checkedPos.y -= 1;
+    checkedPos.y--;
     if (this->_currentGame->isPositionFree(checkedPos, this->_color)) {
         possibleMoves.push_back(checkedPos);
     }
     checkedPos = this->_position;
-    checkedPos.x += 2;
-    checkedPos.y += 1;
+    checkedPos.x++;
+    checkedPos.y++;
+    if (this->_currentGame->isPositionFree(checkedPos, this->_color)) {
+        possibleMoves.push_back(checkedPos);
+    }
+    checkedPos = this->_position;
+    checkedPos.x--;
+    checkedPos.y++;
+    if (this->_currentGame->isPositionFree(checkedPos, this->_color)) {
+        possibleMoves.push_back(checkedPos);
+    }
+    checkedPos = this->_position;
+    checkedPos.x++;
+    checkedPos.y--;
+    if (this->_currentGame->isPositionFree(checkedPos, this->_color)) {
+        possibleMoves.push_back(checkedPos);
+    }
+    checkedPos = this->_position;
+    checkedPos.x--;
+    checkedPos.y--;
     if (this->_currentGame->isPositionFree(checkedPos, this->_color)) {
         possibleMoves.push_back(checkedPos);
     }
@@ -78,7 +71,7 @@ std::vector<boardPos> Knight::getPossibleMoves()
     return possibleMoves;
 }
 
-bool Knight::move(boardPos destPos)
+bool King::move(boardPos destPos)
 {
     IPiece *destPiece = this->_currentGame->getPieceOfPos(destPos);
 
