@@ -8,6 +8,7 @@ Pawn::Pawn(Game *currentGame, ColorName color, boardPos position)
     this->_position = position;
     this->_initialPosition = position;
     this->_name = PieceName::Pawn;
+    this->_enPassant = false;
     this->_displayPiece = new sf::Texture();
     if (!this->_displayPiece->loadFromFile(color == WHITE ? WHITE_PAWN_IMG : BLACK_PAWN_IMG)) {
         printf("Error loading image for pawn\n");
@@ -21,6 +22,7 @@ Pawn::~Pawn()
 std::vector<boardPos> Pawn::getPossibleMoves()
 {
     std::vector<boardPos> possibleMoves;
+    IPiece *enPassantPawn;
     boardPos defaultMove;
     char posCheckerRet;
 
@@ -42,12 +44,12 @@ std::vector<boardPos> Pawn::getPossibleMoves()
     }
 
     // Can only move this way if the position is absolutely empty.
-    if (this->_currentGame->isPositionFree(defaultMove, this->_color) == 2) {
+    if (this->_currentGame->isPositionFree(defaultMove, this->_color) == IS_FREE) {
         possibleMoves.push_back(defaultMove);
     }
 
     // Check if pawn is on first move
-    if (this->_position == this->_initialPosition) {
+    if (this->_position == this->_initialPosition && !possibleMoves.empty()) {
         boardPos pos;
 
         if (this->_color == BLACK) {
@@ -66,7 +68,7 @@ std::vector<boardPos> Pawn::getPossibleMoves()
         }
 
         // Same, can only move forward if position is empty
-        if (this->_currentGame->isPositionFree(pos, this->_color) == 2) {
+        if (this->_currentGame->isPositionFree(pos, this->_color) == IS_FREE) {
                 possibleMoves.push_back(pos);
             }
     }
@@ -77,14 +79,33 @@ std::vector<boardPos> Pawn::getPossibleMoves()
             .x = this->_position.x + 1,
             .y = this->_position.y + 1
         };
-        if (this->_currentGame->isPositionFree(defaultMove, this->_color) == 1) {
+        enPassantPawn = this->_currentGame->getPieceOfPos({
+            .x = this->_position.x,
+            .y = this->_position.y + 1
+        });
+
+        if (this->_currentGame->isPositionFree(defaultMove, this->_color) == ENEMY_AT_POSITION) {
             possibleMoves.push_back(defaultMove);
         }
+        // Checking En Passant possible attacks
+        else if (enPassantPawn && enPassantPawn->getName() == PieceName::Pawn && enPassantPawn->getEnPassant() == true) {
+            possibleMoves.push_back(defaultMove);
+        }
+
         defaultMove = {
             .x = this->_position.x + 1,
             .y = this->_position.y - 1
         };
-        if (this->_currentGame->isPositionFree(defaultMove, this->_color) == 1) {
+        enPassantPawn = this->_currentGame->getPieceOfPos({
+            .x = this->_position.x,
+            .y = this->_position.y - 1
+        });
+
+        if (this->_currentGame->isPositionFree(defaultMove, this->_color) == ENEMY_AT_POSITION) {
+            possibleMoves.push_back(defaultMove);
+        }
+        // Checking En Passant possible attacks
+        else if (enPassantPawn && enPassantPawn->getName() == PieceName::Pawn && enPassantPawn->getEnPassant() == true) {
             possibleMoves.push_back(defaultMove);
         }
     }
@@ -93,14 +114,33 @@ std::vector<boardPos> Pawn::getPossibleMoves()
             .x = this->_position.x - 1,
             .y = this->_position.y - 1
         };
-        if (this->_currentGame->isPositionFree(defaultMove, this->_color) == 1) {
+        enPassantPawn = this->_currentGame->getPieceOfPos({
+            .x = this->_position.x,
+            .y = this->_position.y - 1
+        });
+        
+        if (this->_currentGame->isPositionFree(defaultMove, this->_color) == ENEMY_AT_POSITION) {
             possibleMoves.push_back(defaultMove);
         }
+        // Checking En Passant possible attacks
+        else if (enPassantPawn && enPassantPawn->getName() == PieceName::Pawn && enPassantPawn->getEnPassant() == true) {
+            possibleMoves.push_back(defaultMove);
+        }
+
         defaultMove = {
             .x = this->_position.x - 1,
             .y = this->_position.y + 1
         };
-        if (this->_currentGame->isPositionFree(defaultMove, this->_color) == 1) {
+        enPassantPawn = this->_currentGame->getPieceOfPos({
+            .x = this->_position.x,
+            .y = this->_position.y - 1
+        });
+
+        if (this->_currentGame->isPositionFree(defaultMove, this->_color) == ENEMY_AT_POSITION) {
+            possibleMoves.push_back(defaultMove);
+        }
+        // Checking En Passant possible attacks
+        else if (enPassantPawn && enPassantPawn->getName() == PieceName::Pawn && enPassantPawn->getEnPassant() == true) {
             possibleMoves.push_back(defaultMove);
         }
     }
@@ -108,17 +148,35 @@ std::vector<boardPos> Pawn::getPossibleMoves()
     return possibleMoves;
 }
 
-bool Pawn::move(boardPos destPos)
+IPiece *Pawn::move(boardPos destPos)
 {
     IPiece *destPiece = this->_currentGame->getPieceOfPos(destPos);
 
+    // en passant flag for first double move
+    if (destPos.x == this->_position.x + 2 || destPos.x == this->_position.x - 2) {
+        this->_enPassant = true;
+    }
     // Piece is attacking opponent
     if (destPiece && destPiece->getColor() != this->_color) {
-        printf("Piece %s attacked %s on [X = %i ; Y = %i]\n", enumPieceName[this->_name], enumPieceName[destPiece->getName()], destPos.x, destPos.y);
         this->_currentGame->removePiece(destPiece);
+    }
+
+    // We check if we are doing en passant attack
+    if (destPiece == nullptr && destPos.y != this->_position.y) {
+        if (destPos.y == this->_position.y + 1) {
+            destPiece = this->_currentGame->getPieceOfPos({.x = this->_position.x, .y = this->_position.y + 1});
+        }
+        else if (destPos.y == this->_position.y - 1) {
+            destPiece = this->_currentGame->getPieceOfPos({.x = this->_position.x, .y = this->_position.y - 1});
+        }
+        if (destPiece && destPiece->getName() == PieceName::Pawn && destPiece->getEnPassant() == true) {
+            // En Passant capture !
+            printf("EN PASSANT ! \n");
+            this->_currentGame->removePiece(destPiece);
+        }
     }
 
     this->_position = destPos;
 
-    return true;
+    return destPiece;
 }

@@ -31,7 +31,7 @@ std::vector<boardPos> Bishop::getPossibleMoves()
     {
         possibleMoves.push_back(checkedPos);
         // We cannot get past more than one enemy
-        if (posCheckerRet == 1) {
+        if (posCheckerRet == ENEMY_AT_POSITION) {
             break;
         }
     }
@@ -40,7 +40,7 @@ std::vector<boardPos> Bishop::getPossibleMoves()
             (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color)))
     {
         possibleMoves.push_back(checkedPos);
-        if (posCheckerRet == 1) {
+        if (posCheckerRet == ENEMY_AT_POSITION) {
             break;
         }
     }
@@ -49,7 +49,7 @@ std::vector<boardPos> Bishop::getPossibleMoves()
             (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color)))
     {
         possibleMoves.push_back(checkedPos);
-        if (posCheckerRet == 1) {
+        if (posCheckerRet == ENEMY_AT_POSITION) {
             break;
         }
     }
@@ -58,7 +58,7 @@ std::vector<boardPos> Bishop::getPossibleMoves()
             (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color)))
     {
         possibleMoves.push_back(checkedPos);
-        if (posCheckerRet == 1) {
+        if (posCheckerRet == ENEMY_AT_POSITION) {
             break;
         }
     }
@@ -66,17 +66,17 @@ std::vector<boardPos> Bishop::getPossibleMoves()
     return possibleMoves;
 }
 
-bool Bishop::move(boardPos destPos)
+// Returns the captured piece if any, nullptre otherwise
+IPiece *Bishop::move(boardPos destPos)
 {
     IPiece *destPiece = this->_currentGame->getPieceOfPos(destPos);
 
     // Piece is attacking opponent
     if (destPiece && destPiece->getColor() != this->_color) {
-        printf("Piece %s attacked %s on [X = %i ; Y = %i]\n", enumPieceName[this->_name], enumPieceName[destPiece->getName()], destPos.x, destPos.y);
         this->_currentGame->removePiece(destPiece);
     }
 
     this->_position = destPos;
 
-    return true;
+    return destPiece;
 }

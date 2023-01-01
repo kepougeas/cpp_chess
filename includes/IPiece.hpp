@@ -38,7 +38,7 @@ public:
     ~IPiece() { delete this->_displayPiece; };
 
     virtual std::vector<boardPos> getPossibleMoves() = 0;
-    virtual bool move(boardPos) = 0;
+    virtual IPiece *move(boardPos) = 0;
 
     boardPos getPosition() { return this->_position; };
     PieceName getName() { return this->_name; };
@@ -46,11 +46,13 @@ public:
     void printPossibleMoves();
     void printPosition() { printf("Piece %s %s is at [X = %i ; Y = %i]\n", this->_color == WHITE ? "WHITE" : "BLACK", enumPieceName[this->_name], this->_position.x, this->_position.y); };
     sf::Texture *getTexture() { return this->_displayPiece; };
+    bool getEnPassant() { return this->_enPassant; };
 protected:
     PieceName        _name;
     boardPos         _position;
     ColorName        _color;
     sf::Texture      *_displayPiece;
+    bool             _enPassant = false;
 };
 
 inline bool operator==(const boardPos &pos1, const boardPos &pos2)

@@ -1,6 +1,9 @@
 #include "../includes/Equilattechess.hpp"
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <cstddef>
 
@@ -34,7 +37,7 @@ Board::Board(sf::RenderWindow *window, Game *currentGame, int *state)
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             sf::RectangleShape square(sf::Vector2f(120, 120));
-            square.setFillColor(colorToggle == true ? sf::Color::White : sf::Color::Black);
+            square.setFillColor(colorToggle == true ? sf::Color::White : sf::Color(165,42,42,255));
             square.setPosition(j * 120, i * 120);
             this->_chessSquares[i][j] = square;
             colorToggle = !colorToggle;
@@ -78,6 +81,10 @@ void Board::drawBoard()
 
         for (boardPos currPos: possibleMoves)
         {
+            // We do not draw moves where the King would be in check
+            if (this->_currentGame->checkNextKingSituation(piece, currPos) != NORMAL) {
+                continue;
+            }
             sf::RectangleShape possibleMoveSquare(sf::Vector2f(100, 100));
             
             possibleMoveSquare.setFillColor(sf::Color(255, 255, 255, 0));
@@ -144,11 +151,131 @@ void Board::checkClickEvents()
                 && (clicPosition.y > (currPos.x * 120) && clicPosition.y < (currPos.x * 120 + 120)))
                 {
                     // Clic happened on a possible move, so we move the piece
-                    clickedPiece->move(currPos);
-                    this->_currentGame->finishTurn();
+                    // We can only move the piece if it does not put the King in Check
+                    if (this->_currentGame->checkNextKingSituation(clickedPiece, currPos) == NORMAL) {
+                        clickedPiece->move(currPos);
+                        if (clickedPiece->getName() == Pawn &&
+                            ((clickedPiece->getColor() == WHITE && currPos.x == 0) ||
+                            (clickedPiece->getColor() == BLACK && currPos.x == 7))) {
+                                PieceName chosenPromotion = this->promotionMenu(clickedPiece->getColor());
+                                this->_currentGame->promotePawn(clickedPiece, chosenPromotion);
+                        }
+                        this->_currentGame->finishTurn();
+                        if (this->_currentGame->checkMateChecker(this->_currentGame->getCurrentPlayer()) == CHECKMATE) {
+                            this->_currentGame->finishGame();
+                        }
+                    }
                 }
             }
             this->_currentGame->setSelectedPiece(nullptr);
+        }
+    }
+}
+
+PieceName Board::promotionMenu(ColorName promotedColor)
+{
+    // display menu for piece promotion selection
+    sf::RectangleShape menuArea(sf::Vector2f(600, 300));
+    sf::Text           menuText;
+
+    sf::Texture        pawnTexture;
+    sf::Texture        bishopTexture;
+    sf::Texture        knightTexture;
+    sf::Texture        queenTexture;
+    sf::Texture        rookTexture;
+
+    sf::Sprite         pawnSprite;
+    sf::Sprite         bishopSprite;
+    sf::Sprite         knightSprite;
+    sf::Sprite         queenSprite;
+    sf::Sprite         rookSprite;
+
+    menuArea.setFillColor(sf::Color::White);
+    menuArea.setOutlineColor(sf::Color::Black);
+    menuArea.setOutlineThickness(20);
+    menuArea.setPosition(this->_window->getSize().x / 2 - 300, this->_window->getSize().y / 2 - 150);
+    
+    menuText.setFont(this->_fontGeneral);
+    menuText.setCharacterSize(CURR_PLAYER_TEXT_SIZE);
+    menuText.setString(PROMOTION_MENU_TEXT);
+    menuText.setPosition(menuArea.getPosition().x + 30, menuArea.getPosition().y + 20);
+    menuText.setFillColor(sf::Color::Black);
+
+    pawnTexture.loadFromFile(promotedColor == WHITE ? WHITE_PAWN_IMG : BLACK_PAWN_IMG);
+    bishopTexture.loadFromFile(promotedColor == WHITE ? WHITE_BISHOP_IMG : BLACK_BISHOP_IMG);
+    knightTexture.loadFromFile(promotedColor == WHITE ? WHITE_KNIGHT_IMG : BLACK_KNIGHT_IMG);
+    queenTexture.loadFromFile(promotedColor == WHITE ? WHITE_QUEEN_IMG : BLACK_QUEEN_IMG);
+    rookTexture.loadFromFile(promotedColor == WHITE ? WHITE_ROOK_IMG : BLACK_ROOK_IMG);
+
+    pawnSprite.setTexture(pawnTexture);
+    pawnSprite.setPosition(menuArea.getPosition().x + 40, menuArea.getPosition().y + 120);
+
+    bishopSprite.setTexture(bishopTexture);
+    bishopSprite.setPosition(pawnSprite.getGlobalBounds().width + pawnSprite.getPosition().x + 10, menuArea.getPosition().y + 120);
+
+    knightSprite.setTexture(knightTexture);
+    knightSprite.setPosition(bishopSprite.getGlobalBounds().width + bishopSprite.getPosition().x + 10, menuArea.getPosition().y + 120);
+
+    queenSprite.setTexture(queenTexture);
+    queenSprite.setPosition(knightSprite.getGlobalBounds().width + knightSprite.getPosition().x + 10, menuArea.getPosition().y + 120);
+
+    rookSprite.setTexture(rookTexture);
+    rookSprite.setPosition(queenSprite.getGlobalBounds().width + queenSprite.getPosition().x + 10, menuArea.getPosition().y + 120);
+
+    while (true)
+    {
+        this->_window->draw(menuArea);
+        this->_window->draw(menuText);
+        this->_window->draw(pawnSprite);
+        this->_window->draw(bishopSprite);
+        this->_window->draw(knightSprite);
+        this->_window->draw(queenSprite);
+        this->_window->draw(rookSprite);
+
+        this->_window->display();
+
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+        {
+            // Quick sleep to prevent annoying multiple clicking
+            usleep(100000);
+
+            sf::Vector2i clicPosition = sf::Mouse::getPosition(*this->_window);
+            sf::Vector2f exitButtonPosition = this->_exitButton.getPosition();
+            sf::FloatRect exitButtonSize = this->_exitButton.getGlobalBounds();
+
+            // We clicked EXIT
+            if ((clicPosition.x >= exitButtonPosition.x && clicPosition.x <= (exitButtonPosition.x + exitButtonSize.width * 2))
+            && (clicPosition.y >= exitButtonPosition.y && clicPosition.y <= (exitButtonPosition.y + exitButtonSize.height * 2)))
+            {
+                *this->_state = EXIT_STATE;
+                return Pawn;
+            }
+
+            // We clicked on PAWN
+            if ((clicPosition.x > pawnSprite.getPosition().x && clicPosition.x < (pawnSprite.getPosition().x + pawnSprite.getGlobalBounds().width))
+            && (clicPosition.y > pawnSprite.getPosition().y && clicPosition.y < (pawnSprite.getPosition().y + pawnSprite.getGlobalBounds().height))) {
+                return Pawn;
+            }
+            // We clicked BISHOP
+            else if ((clicPosition.x > bishopSprite.getPosition().x && clicPosition.x < (bishopSprite.getPosition().x + bishopSprite.getGlobalBounds().width))
+            && (clicPosition.y > bishopSprite.getPosition().y && clicPosition.y < (bishopSprite.getPosition().y + bishopSprite.getGlobalBounds().height))) {
+                return Bishop;
+            }
+            // We clicked KNIGHT
+            else if ((clicPosition.x > knightSprite.getPosition().x && clicPosition.x < (knightSprite.getPosition().x + knightSprite.getGlobalBounds().width))
+            && (clicPosition.y > knightSprite.getPosition().y && clicPosition.y < (knightSprite.getPosition().y + knightSprite.getGlobalBounds().height))) {
+                return Knight;
+            }
+            // We clicked QUEEN
+            else if ((clicPosition.x > queenSprite.getPosition().x && clicPosition.x < (queenSprite.getPosition().x + queenSprite.getGlobalBounds().width))
+            && (clicPosition.y > queenSprite.getPosition().y && clicPosition.y < (queenSprite.getPosition().y + queenSprite.getGlobalBounds().height))) {
+                return Queen;
+            }
+            // We clicked ROOK
+            else if ((clicPosition.x > rookSprite.getPosition().x && clicPosition.x < (rookSprite.getPosition().x + rookSprite.getGlobalBounds().width))
+            && (clicPosition.y > rookSprite.getPosition().y && clicPosition.y < (rookSprite.getPosition().y + rookSprite.getGlobalBounds().height))) {
+                return Rook;
+            }
         }
     }
 }

@@ -71,17 +71,16 @@ std::vector<boardPos> King::getPossibleMoves()
     return possibleMoves;
 }
 
-bool King::move(boardPos destPos)
+IPiece *King::move(boardPos destPos)
 {
     IPiece *destPiece = this->_currentGame->getPieceOfPos(destPos);
 
     // Piece is attacking opponent
     if (destPiece && destPiece->getColor() != this->_color) {
-        printf("Piece %s attacked %s on [X = %i ; Y = %i]\n", enumPieceName[this->_name], enumPieceName[destPiece->getName()], destPos.x, destPos.y);
         this->_currentGame->removePiece(destPiece);
     }
 
     this->_position = destPos;
 
-    return true;
+    return destPiece;
 }

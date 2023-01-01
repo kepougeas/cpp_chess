@@ -31,7 +31,7 @@ std::vector<boardPos> Queen::getPossibleMoves()
     {
         possibleMoves.push_back(checkedPos);
         // Cannot move past more than one ennemy
-        if (posCheckerRet == 1) {
+        if (posCheckerRet == ENEMY_AT_POSITION) {
             break;
         }
     }
@@ -40,7 +40,7 @@ std::vector<boardPos> Queen::getPossibleMoves()
             (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color)))
     {
         possibleMoves.push_back(checkedPos);
-        if (posCheckerRet == 1) {
+        if (posCheckerRet == ENEMY_AT_POSITION) {
             break;
         }
     }
@@ -49,7 +49,7 @@ std::vector<boardPos> Queen::getPossibleMoves()
             (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color)))
     {
         possibleMoves.push_back(checkedPos);
-        if (posCheckerRet == 1) {
+        if (posCheckerRet == ENEMY_AT_POSITION) {
             break;
         }
     }
@@ -58,7 +58,7 @@ std::vector<boardPos> Queen::getPossibleMoves()
             (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color)))
     {
         possibleMoves.push_back(checkedPos);
-        if (posCheckerRet == 1) {
+        if (posCheckerRet == ENEMY_AT_POSITION) {
             break;
         }
     }
@@ -68,7 +68,7 @@ std::vector<boardPos> Queen::getPossibleMoves()
     while (++checkedPos.x <= 7 &&
             (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color))) {
         possibleMoves.push_back(checkedPos);
-        if (posCheckerRet == 1) {
+        if (posCheckerRet == ENEMY_AT_POSITION) {
             break;
         }
     }
@@ -76,7 +76,7 @@ std::vector<boardPos> Queen::getPossibleMoves()
     while(++checkedPos.y <= 7 && 
             (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color))) {
         possibleMoves.push_back(checkedPos);
-        if (posCheckerRet == 1) {
+        if (posCheckerRet == ENEMY_AT_POSITION) {
             break;
         }
     }
@@ -84,7 +84,7 @@ std::vector<boardPos> Queen::getPossibleMoves()
     while (--checkedPos.x >= 0 && 
             (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color))) {
         possibleMoves.push_back(checkedPos);
-        if (posCheckerRet == 1) {
+        if (posCheckerRet == ENEMY_AT_POSITION) {
             break;
         }
     }
@@ -92,7 +92,7 @@ std::vector<boardPos> Queen::getPossibleMoves()
     while (--checkedPos.y >= 0 && 
             (posCheckerRet = this->_currentGame->isPositionFree(checkedPos, this->_color))) {
         possibleMoves.push_back(checkedPos);
-        if (posCheckerRet == 1) {
+        if (posCheckerRet == ENEMY_AT_POSITION) {
             break;
         }
     }
@@ -100,17 +100,16 @@ std::vector<boardPos> Queen::getPossibleMoves()
     return possibleMoves;
 }
 
-bool Queen::move(boardPos destPos)
+IPiece *Queen::move(boardPos destPos)
 {
     IPiece *destPiece = this->_currentGame->getPieceOfPos(destPos);
 
     // Piece is attacking opponent
     if (destPiece && destPiece->getColor() != this->_color) {
-        printf("Piece %s attacked %s on [X = %i ; Y = %i]\n", enumPieceName[this->_name], enumPieceName[destPiece->getName()], destPos.x, destPos.y);
         this->_currentGame->removePiece(destPiece);
     }
 
     this->_position = destPos;
 
-    return true;
+    return destPiece;
 }

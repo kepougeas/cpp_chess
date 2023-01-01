@@ -2,15 +2,18 @@
 
 #include "IPiece.hpp"
 
-// TODO: checkMateChecker
-// TODO: possibleMoves behavior in case of king trouble
-
+// NICE TO HAVE
 // TODO: en passant
-// TODO: promote
 // TODO: castling
 
+// BONUS POINTS
 // TODO: capture history for each player
 // TODO: side display of chess compliant indexes
+// TODO: undo a move
+
+// UBERMENCH BONUS
+// TODO: Use CMake for nice cross compilation
+// TODO: Ability to save and restore a game
 
 // CHESS BOARD OVERVIEW
 //
@@ -36,22 +39,40 @@
 //   v
 // Xaxis
 
+enum positionFreeType {
+    NON_FREE,
+    ENEMY_AT_POSITION,
+    IS_FREE,
+};
+
+enum checkMateSituation {
+    NORMAL,
+    CHECK,
+    CHECKMATE
+};
+
 class Game
 {
 public:
-    Game();
+    Game(int*);
     ~Game();
     void addPiece(IPiece *piece) { this->_gamePieces.push_back(piece); };
     void removePiece(IPiece *piece);
     void printAllPieces() { for(IPiece *piece : this->_gamePieces) {piece->printPosition();} };
-    char isPositionFree(boardPos, ColorName);
+    positionFreeType isPositionFree(boardPos, ColorName);
     IPiece *getPieceOfPos(boardPos);
     IPiece *getSelectedPiece() { return this->_selectedPiece; };
     void setSelectedPiece(IPiece *piece) { this->_selectedPiece = piece; };
     ColorName getCurrentPlayer() { return this->_currentPlayer; };
     void finishTurn() { this->_currentPlayer = this->_currentPlayer == WHITE ? BLACK : WHITE; };
+    checkMateSituation checkNextKingSituation(IPiece*, boardPos);
+    checkMateSituation checkMateChecker(ColorName);
+    void promotePawn(IPiece*, PieceName);
+    void resetEnPassant();
+    void finishGame();
 private:
     std::vector<IPiece *> _gamePieces;
     ColorName             _currentPlayer;
     IPiece                *_selectedPiece;
+    int                   *_status;
 };

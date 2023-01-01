@@ -12,7 +12,7 @@ public:
     Pawn (Game*, ColorName, boardPos);
     virtual ~Pawn();
     virtual std::vector<boardPos> getPossibleMoves();
-    virtual bool move(boardPos);
+    virtual IPiece *move(boardPos);
 protected:
     Game     *_currentGame;
     boardPos _initialPosition;
