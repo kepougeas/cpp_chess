@@ -6,6 +6,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <cstddef>
+#include <string>
 
 Board::Board(sf::RenderWindow *window, Game *currentGame, int *state)
 {
@@ -14,7 +15,7 @@ Board::Board(sf::RenderWindow *window, Game *currentGame, int *state)
     this->_currentGame = currentGame;
 
     // Loading the fonts
-    if (!this->_fontGeneral.loadFromFile(TITLE_FONT_PATH)) {
+    if (!this->_fontGeneral.loadFromFile(AKIRA_FONT_PATH)) {
         printf("Could not load font");
         exit(-1);
     }
@@ -39,6 +40,28 @@ Board::Board(sf::RenderWindow *window, Game *currentGame, int *state)
     this->_capturedPiecesText.setFillColor(sf::Color::White);
     this->_capturedPiecesText.setPosition(this->_window->getSize().x - 400, 200);
 
+    // Indexes text
+    for (int i = 0; i < 16; i++) {
+        sf::Text indexText;
+        char index[2] = {'\0', '\0'};
+
+        indexText.setFont(this->_fontGeneral);
+        indexText.setCharacterSize(CURR_PLAYER_TEXT_SIZE);
+        indexText.setFillColor(sf::Color::Black);
+        // Number indexes
+        if (i < 8) {
+            indexText.setPosition(5, i * 120 + 5);
+            index[0] = '8' - i;
+            indexText.setString(index);
+        }
+        else if (i >= 8) {
+            indexText.setPosition((i - 8) * 120 + 100, 940);
+            index[0] = 'A' + (i - 8);
+            indexText.setString(index);
+        }
+        this->_indexes[i] = indexText;
+    }
+
     // Creating the ChessBoard squares
     bool colorToggle = true;
     for (int i = 0; i < 8; i++) {
@@ -56,6 +79,7 @@ Board::Board(sf::RenderWindow *window, Game *currentGame, int *state)
 void Board::drawBoard()
 {
     IPiece *piece;
+    char index[2] = {'\0', '\0'};
 
     // We draw EXIT button player turn display, the main board and all the pieces
     this->_window->draw(this->_exitButton);
@@ -103,6 +127,7 @@ void Board::drawBoard()
     }
 
     this->drawCapturedPieces();
+    this->drawIndexes();
 
     this->checkClickEvents();
 }
@@ -138,6 +163,13 @@ void Board::drawCapturedPieces()
         sprite.scale(sf::Vector2f(0.5, 0.5));
         sprite.setPosition(widthIndex++ * 60 + (this->_window->getSize().x - 420), heightIndex * 60 + 470);
         this->_window->draw(sprite);
+    }
+}
+
+void Board::drawIndexes()
+{
+    for (int i = 0; i < 16; i++) {
+        this->_window->draw(this->_indexes[i]);
     }
 }
 

@@ -4,7 +4,6 @@
 #include <vector>
 
 // BONUS POINTS
-// TODO: side display of chess compliant indexes
 // TODO: undo a move
 
 // UBERMENCH BONUS

@@ -7,8 +7,8 @@ Menu::Menu(sf::RenderWindow *window, int *state)
     this->_state = state;
 
     // Loading the fonts
-    if (!this->_fontTitle.loadFromFile(TITLE_FONT_PATH) 
-    || !this->_fontMenu.loadFromFile(MENU_FONT_PATH)) {
+    if (!this->_fontTitle.loadFromFile(AKIRA_FONT_PATH) 
+    || !this->_fontMenu.loadFromFile(AKIRA_FONT_PATH)) {
         printf("Could not load font");
         exit(-1);
     }

@@ -9,7 +9,7 @@
 
 #define CURRENT_PLAYER_TEXT_WHITE "Current player is : WHITE"
 #define CURRENT_PLAYER_TEXT_BLACK "Current player is : BLACK"
-#define CURR_PLAYER_TEXT_SIZE 35
+#define CURR_PLAYER_TEXT_SIZE 15
 
 #define PROMOTION_MENU_TEXT "Click on the desired promotion :"
 
@@ -23,6 +23,7 @@ public:
 
     void drawBoard();
     void drawCapturedPieces();
+    void drawIndexes();
     void checkClickEvents();
     PieceName promotionMenu(ColorName);
  private:
@@ -33,5 +34,6 @@ public:
     sf::Text           _exitButton;
     sf::Text           _currentPlayerText;
     sf::Text           _capturedPiecesText;
+    sf::Text           _indexes[16];
     sf::RectangleShape _chessSquares[8][8];
 };

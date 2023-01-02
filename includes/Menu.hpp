@@ -2,11 +2,10 @@
 
 #include "Equilattechess.hpp"
 
-#define TITLE_FONT_PATH "./fonts/AntipastoPro-Bold_trial.ttf"
-#define MENU_FONT_PATH "./fonts/AntipastoPro-Medium_trial.ttf"
+#define AKIRA_FONT_PATH "./fonts/akira_font.otf"
 
-#define TITLE_TEXT_SIZE 100
-#define MENU_TEXT_SIZE 65
+#define TITLE_TEXT_SIZE 55
+#define MENU_TEXT_SIZE 45
 
 #define TITLE_TEXT "Welcome to Equi Latte Chess !"
 #define PLAY_TEXT "PLAY"

@@ -30,7 +30,7 @@
 
 #define WINDOW_TITLE "Equi Latte Chess"
 #define WINDOW_WIDTH 1400
-#define WINDOW_HEIGHT 1000
+#define WINDOW_HEIGHT 960
 #define MENU_STATE 1
 #define PLAY_STATE 2
 #define EXIT_STATE 3
