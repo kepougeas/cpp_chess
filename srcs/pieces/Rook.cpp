@@ -9,6 +9,7 @@ Rook::Rook(Game *currentGame, ColorName color, boardPos position)
     this->_initialPosition = position;
     this->_name = PieceName::Rook;
     this->_displayPiece = new sf::Texture();
+    this->_displayPiece->setSmooth(true);
     if (!this->_displayPiece->loadFromFile(color == WHITE ? WHITE_ROOK_IMG : BLACK_ROOK_IMG)) {
         printf("Error loading image for rook\n");
         exit(1);

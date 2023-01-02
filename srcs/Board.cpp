@@ -40,6 +40,11 @@ Board::Board(sf::RenderWindow *window, Game *currentGame, int *state)
     this->_capturedPiecesText.setFillColor(sf::Color::White);
     this->_capturedPiecesText.setPosition(this->_window->getSize().x - 400, 200);
 
+    // Captured area
+    this->_capturedArea = sf::RectangleShape(sf::Vector2f(WINDOW_WIDTH - 1000, 480));
+    this->_capturedArea.setFillColor(sf::Color(255, 248, 220, 255));
+    this->_capturedArea.setPosition(975, 240);
+
     // Winner text
     this->_winnerText.setFont(this->_fontGeneral);
     this->_winnerText.setString(WINNER_TEXT);
@@ -74,7 +79,7 @@ Board::Board(sf::RenderWindow *window, Game *currentGame, int *state)
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             sf::RectangleShape square(sf::Vector2f(120, 120));
-            square.setFillColor(colorToggle == true ? sf::Color::White : sf::Color(165,42,42,255));
+            square.setFillColor(colorToggle == true ? sf::Color(255, 248, 220, 255) : sf::Color(165,42,42,255));
             square.setPosition(j * 120, i * 120);
             this->_chessSquares[i][j] = square;
             colorToggle = !colorToggle;
@@ -99,7 +104,7 @@ void Board::drawBoard()
             if (piece != nullptr) {
                 sf::Sprite sprite;
                 sprite.setTexture(*piece->getTexture());
-                sprite.setPosition(j * 120 + 20, i * 120 + 20);
+                sprite.setPosition(j * 120 + 33, i * 120 + (piece->getName() == Pawn ? 20 : 10));
                 this->_window->draw(sprite);
             }
         }
@@ -107,14 +112,14 @@ void Board::drawBoard()
 
     // If there is a selected Piece we draw square around it and possible moves on board
     if ((piece = this->_currentGame->getSelectedPiece()) != nullptr) {
-        sf::RectangleShape selectSquare(sf::Vector2f(100, 100));
+        sf::RectangleShape selectSquare(sf::Vector2f(110, 110));
         boardPos piecePos = piece->getPosition();
         std::vector<boardPos> possibleMoves = piece->getPossibleMoves();
 
         selectSquare.setFillColor(sf::Color(255,255,255,0));
-        selectSquare.setOutlineColor(sf::Color::Green);
-        selectSquare.setOutlineThickness(10);
-        selectSquare.setPosition(piecePos.y * 120 + 10, piecePos.x * 120 + 10);
+        selectSquare.setOutlineColor(sf::Color(104,165,42));
+        selectSquare.setOutlineThickness(5);
+        selectSquare.setPosition(piecePos.y * 120 + 5, piecePos.x * 120 + 5);
         this->_window->draw(selectSquare);
 
         for (boardPos currPos: possibleMoves)
@@ -123,12 +128,12 @@ void Board::drawBoard()
             if (this->_currentGame->checkNextKingSituation(piece, currPos) != NORMAL) {
                 continue;
             }
-            sf::RectangleShape possibleMoveSquare(sf::Vector2f(100, 100));
+            sf::RectangleShape possibleMoveSquare(sf::Vector2f(110, 110));
             
             possibleMoveSquare.setFillColor(sf::Color(255, 255, 255, 0));
-            possibleMoveSquare.setOutlineColor(sf::Color::Blue);
-            possibleMoveSquare.setOutlineThickness(10);
-            possibleMoveSquare.setPosition(currPos.y * 120 + 10, currPos.x * 120 + 10);
+            possibleMoveSquare.setOutlineColor(sf::Color(42,165,165));
+            possibleMoveSquare.setOutlineThickness(5);
+            possibleMoveSquare.setPosition(currPos.y * 120 + 5, currPos.x * 120 + 5);
             this->_window->draw(possibleMoveSquare);
         }
     }
@@ -145,6 +150,7 @@ void Board::drawCapturedPieces()
     char heightIndex = 0;
 
     this->_window->draw(this->_capturedPiecesText);
+    this->_window->draw(this->_capturedArea);
 
     for (IPiece *piece : this->_currentGame->getCapturedPieces(WHITE)) {
         if (widthIndex > 5) {
@@ -369,7 +375,7 @@ void Board::displayWinner(ColorName winner)
     sf::RectangleShape winnerArea(sf::Vector2f(WINDOW_WIDTH - 40, WINDOW_HEIGHT - 40));
 
     winnerArea.setFillColor(sf::Color(165,42,42,255));
-    winnerArea.setOutlineColor(sf::Color::Green);
+    winnerArea.setOutlineColor(sf::Color(104,165,42));
     winnerArea.setOutlineThickness(30);
     winnerArea.setPosition(20, 20);
 

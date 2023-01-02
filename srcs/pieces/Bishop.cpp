@@ -9,6 +9,7 @@ Bishop::Bishop(Game *currentGame, ColorName color, boardPos position)
     this->_initialPosition = position;
     this->_name = PieceName::Bishop;
     this->_displayPiece = new sf::Texture();
+    this->_displayPiece->setSmooth(true);
     if (!this->_displayPiece->loadFromFile(color == WHITE ? WHITE_BISHOP_IMG : BLACK_BISHOP_IMG)) {
         printf("Error load image for bishop\n");
         exit(1);

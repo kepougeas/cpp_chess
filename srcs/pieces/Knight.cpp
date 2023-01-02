@@ -9,6 +9,7 @@ Knight::Knight(Game *currentGame, ColorName color, boardPos position)
     this->_initialPosition = position;
     this->_name = PieceName::Knight;
     this->_displayPiece = new sf::Texture();
+    this->_displayPiece->setSmooth(true);
     if (!this->_displayPiece->loadFromFile(color == WHITE ? WHITE_KNIGHT_IMG : BLACK_KNIGHT_IMG)) {
         printf("Error loading image for knight\n");
         exit(1);

@@ -40,4 +40,5 @@ public:
     sf::Text           _indexes[16];
     sf::Text           _winnerText;
     sf::RectangleShape _chessSquares[8][8];
+    sf::RectangleShape _capturedArea;
 };

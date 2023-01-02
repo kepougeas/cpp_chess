@@ -10,6 +10,7 @@ Pawn::Pawn(Game *currentGame, ColorName color, boardPos position)
     this->_name = PieceName::Pawn;
     this->_enPassant = false;
     this->_displayPiece = new sf::Texture();
+    this->_displayPiece->setSmooth(true);
     if (!this->_displayPiece->loadFromFile(color == WHITE ? WHITE_PAWN_IMG : BLACK_PAWN_IMG)) {
         printf("Error loading image for pawn\n");
         exit(1);

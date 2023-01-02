@@ -9,6 +9,7 @@ King::King(Game *currentGame, ColorName color, boardPos position)
     this->_initialPosition = position;
     this->_name = PieceName::King;
     this->_displayPiece = new sf::Texture();
+    this->_displayPiece->setSmooth(true);
     if (!this->_displayPiece->loadFromFile(color == WHITE ? WHITE_KING_IMG : BLACK_KING_IMG)) {
         printf("Error loading image for king\n");
         exit(1);

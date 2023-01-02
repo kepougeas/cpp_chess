@@ -9,6 +9,7 @@ Queen::Queen(Game *currentGame, ColorName color, boardPos position)
     this->_initialPosition = position;
     this->_name = PieceName::Queen;
     this->_displayPiece = new sf::Texture();
+    this->_displayPiece->setSmooth(true);
     if (!this->_displayPiece->loadFromFile(color == WHITE ? WHITE_QUEEN_IMG : BLACK_QUEEN_IMG)) {
         printf("Error loading image for queen\n");
         exit(1);
