@@ -178,3 +178,13 @@ void Game::resetEnPassant()
         }
     }
 }
+
+void Game::addCapturedPiece(IPiece *piece)
+{
+    if (piece->getColor() == WHITE) {
+        this->_capturedWhitePieces.push_back(piece);
+    }
+    else {
+        this->_capturedBlackPieces.push_back(piece);
+    }
+}

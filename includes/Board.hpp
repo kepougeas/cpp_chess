@@ -13,6 +13,8 @@
 
 #define PROMOTION_MENU_TEXT "Click on the desired promotion :"
 
+#define CAPTURED_PIECES_TEXT "Captured pieces :"
+
 class Board
 {
 public:
@@ -20,6 +22,7 @@ public:
     ~Board() = default;
 
     void drawBoard();
+    void drawCapturedPieces();
     void checkClickEvents();
     PieceName promotionMenu(ColorName);
  private:
@@ -29,5 +32,6 @@ public:
     sf::Font           _fontGeneral;
     sf::Text           _exitButton;
     sf::Text           _currentPlayerText;
+    sf::Text           _capturedPiecesText;
     sf::RectangleShape _chessSquares[8][8];
 };

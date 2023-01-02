@@ -1,9 +1,9 @@
 #pragma once
 
 #include "IPiece.hpp"
+#include <vector>
 
 // BONUS POINTS
-// TODO: capture history for each player
 // TODO: side display of chess compliant indexes
 // TODO: undo a move
 
@@ -66,8 +66,12 @@ public:
     void promotePawn(IPiece*, PieceName);
     void resetEnPassant();
     void finishGame();
+    std::vector<IPiece *> getCapturedPieces(ColorName color) { return color == WHITE ? this->_capturedWhitePieces : this->_capturedBlackPieces; };
+    void addCapturedPiece(IPiece*);
 private:
     std::vector<IPiece *> _gamePieces;
+    std::vector<IPiece *> _capturedWhitePieces;
+    std::vector<IPiece *> _capturedBlackPieces;
     ColorName             _currentPlayer;
     IPiece                *_selectedPiece;
     int                   *_status;

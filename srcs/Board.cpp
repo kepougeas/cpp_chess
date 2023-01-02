@@ -32,6 +32,13 @@ Board::Board(sf::RenderWindow *window, Game *currentGame, int *state)
     this->_currentPlayerText.setFillColor(sf::Color::Red);
     this->_currentPlayerText.setPosition(this->_window->getSize().x - 400, 150);
 
+    // Captured pieces text
+    this->_capturedPiecesText.setFont(this->_fontGeneral);
+    this->_capturedPiecesText.setString(CAPTURED_PIECES_TEXT);
+    this->_capturedPiecesText.setCharacterSize(CURR_PLAYER_TEXT_SIZE);
+    this->_capturedPiecesText.setFillColor(sf::Color::White);
+    this->_capturedPiecesText.setPosition(this->_window->getSize().x - 400, 200);
+
     // Creating the ChessBoard squares
     bool colorToggle = true;
     for (int i = 0; i < 8; i++) {
@@ -95,7 +102,43 @@ void Board::drawBoard()
         }
     }
 
+    this->drawCapturedPieces();
+
     this->checkClickEvents();
+}
+
+void Board::drawCapturedPieces()
+{
+    char widthIndex = 0;
+    char heightIndex = 0;
+
+    this->_window->draw(this->_capturedPiecesText);
+
+    for (IPiece *piece : this->_currentGame->getCapturedPieces(WHITE)) {
+        if (widthIndex > 5) {
+            widthIndex = 0;
+            heightIndex++;
+        }
+        sf::Sprite sprite;
+        sprite.setTexture(*piece->getTexture());
+        sprite.scale(sf::Vector2f(0.5, 0.5));
+        sprite.setPosition(widthIndex++ * 60 + (this->_window->getSize().x - 420), heightIndex * 60 + 270);
+        this->_window->draw(sprite);
+    }
+
+    widthIndex = 0;
+    heightIndex = 0;
+    for (IPiece *piece : this->_currentGame->getCapturedPieces(BLACK)) {
+        if (widthIndex > 5) {
+            widthIndex = 0;
+            heightIndex++;
+        }
+        sf::Sprite sprite;
+        sprite.setTexture(*piece->getTexture());
+        sprite.scale(sf::Vector2f(0.5, 0.5));
+        sprite.setPosition(widthIndex++ * 60 + (this->_window->getSize().x - 420), heightIndex * 60 + 470);
+        this->_window->draw(sprite);
+    }
 }
 
 void Board::checkClickEvents()

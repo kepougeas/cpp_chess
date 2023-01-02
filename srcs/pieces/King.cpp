@@ -112,6 +112,9 @@ IPiece *King::move(boardPos destPos, bool simulated)
 
     // Piece is attacking opponent
     if (destPiece && destPiece->getColor() != this->_color) {
+        if (!simulated) {
+            this->_currentGame->addCapturedPiece(destPiece);
+        }
         this->_currentGame->removePiece(destPiece);
     }
 

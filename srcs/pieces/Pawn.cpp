@@ -158,6 +158,9 @@ IPiece *Pawn::move(boardPos destPos, bool simulated)
     }
     // Piece is attacking opponent
     if (destPiece && destPiece->getColor() != this->_color) {
+        if (!simulated) {
+            this->_currentGame->addCapturedPiece(destPiece);
+        }
         this->_currentGame->removePiece(destPiece);
     }
 
@@ -171,6 +174,9 @@ IPiece *Pawn::move(boardPos destPos, bool simulated)
         }
         if (destPiece && destPiece->getName() == PieceName::Pawn && destPiece->getEnPassant() == true) {
             // En Passant capture !
+            if (!simulated) {
+                this->_currentGame->addCapturedPiece(destPiece);
+            }
             this->_currentGame->removePiece(destPiece);
         }
     }
