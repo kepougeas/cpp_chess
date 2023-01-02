@@ -67,6 +67,7 @@ checkMateSituation Game::checkNextKingSituation(IPiece *pieceToMove, boardPos ne
     std::vector<IPiece*>  savedBoardState = this->_gamePieces; // Saving the current board
     std::vector<boardPos> possibleEnemyMoves;
     boardPos              savedPiecePosition = pieceToMove->getPosition();
+    bool                  savedPieceEnPassant = pieceToMove->getEnPassant();
     
     // Get the king to check
     for (IPiece *piece : this->_gamePieces) {
@@ -89,6 +90,7 @@ checkMateSituation Game::checkNextKingSituation(IPiece *pieceToMove, boardPos ne
                     // Undo our simulated move.
                     this->_gamePieces = savedBoardState;
                     pieceToMove->move(savedPiecePosition);
+                    pieceToMove->setEnPassant(savedPieceEnPassant);
                     return CHECK;
                 }
             }
@@ -98,6 +100,7 @@ checkMateSituation Game::checkNextKingSituation(IPiece *pieceToMove, boardPos ne
     // If none of the enemy's pieces can attack king, then it is OK
     this->_gamePieces = savedBoardState;
     pieceToMove->move(savedPiecePosition);
+    pieceToMove->setEnPassant(savedPieceEnPassant);
     return NORMAL;
 }
 
@@ -158,7 +161,13 @@ void Game::promotePawn(IPiece *pawn, PieceName promotedTo)
     this->addPiece(promotedPiece);   
 }
 
+// Reset En Passant must be used in the beginning of the current player round
 void Game::resetEnPassant()
 {
-    
+    // We set the En Passant flag to false for Pawns
+    for (IPiece *piece : this->_gamePieces) {
+        if (piece->getColor() == this->_currentPlayer && piece->getName() == PieceName::Pawn) {
+            piece->setEnPassant(false);
+        }
+    }
 }

@@ -133,7 +133,7 @@ std::vector<boardPos> Pawn::getPossibleMoves()
         };
         enPassantPawn = this->_currentGame->getPieceOfPos({
             .x = this->_position.x,
-            .y = this->_position.y - 1
+            .y = this->_position.y + 1
         });
 
         if (this->_currentGame->isPositionFree(defaultMove, this->_color) == ENEMY_AT_POSITION) {
@@ -171,7 +171,6 @@ IPiece *Pawn::move(boardPos destPos)
         }
         if (destPiece && destPiece->getName() == PieceName::Pawn && destPiece->getEnPassant() == true) {
             // En Passant capture !
-            printf("EN PASSANT ! \n");
             this->_currentGame->removePiece(destPiece);
         }
     }

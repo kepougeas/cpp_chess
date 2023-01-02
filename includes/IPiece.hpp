@@ -47,6 +47,7 @@ public:
     void printPosition() { printf("Piece %s %s is at [X = %i ; Y = %i]\n", this->_color == WHITE ? "WHITE" : "BLACK", enumPieceName[this->_name], this->_position.x, this->_position.y); };
     sf::Texture *getTexture() { return this->_displayPiece; };
     bool getEnPassant() { return this->_enPassant; };
+    void setEnPassant(bool val) { this->_enPassant = val; };
 protected:
     PieceName        _name;
     boardPos         _position;

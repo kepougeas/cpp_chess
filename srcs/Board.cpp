@@ -161,6 +161,7 @@ void Board::checkClickEvents()
                                 this->_currentGame->promotePawn(clickedPiece, chosenPromotion);
                         }
                         this->_currentGame->finishTurn();
+                        this->_currentGame->resetEnPassant();
                         if (this->_currentGame->checkMateChecker(this->_currentGame->getCurrentPlayer()) == CHECKMATE) {
                             this->_currentGame->finishGame();
                         }

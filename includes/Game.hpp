@@ -3,7 +3,6 @@
 #include "IPiece.hpp"
 
 // NICE TO HAVE
-// TODO: en passant
 // TODO: castling
 
 // BONUS POINTS
