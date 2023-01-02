@@ -134,9 +134,7 @@ checkMateSituation Game::checkMateChecker(ColorName checkedColor)
 void Game::finishGame()
 {
     // the current player is the loser
-
-    printf("Player %s WON !\n", this->_currentPlayer == WHITE ? "BLACK" : "WHITE");
-    *this->_status = EXIT_STATE;
+    *this->_status = this->_currentPlayer == WHITE ? BLACK_WIN_STATE : WHITE_WIN_STATE;
 }
 
 void Game::promotePawn(IPiece *pawn, PieceName promotedTo)

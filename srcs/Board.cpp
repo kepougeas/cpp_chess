@@ -25,7 +25,7 @@ Board::Board(sf::RenderWindow *window, Game *currentGame, int *state)
     this->_exitButton.setString(EXIT_TEXT);
     this->_exitButton.setCharacterSize(MENU_TEXT_SIZE);
     this->_exitButton.setFillColor(sf::Color::White);
-    this->_exitButton.setPosition(this->_window->getSize().x - this->_exitButton.getGlobalBounds().width * 2, 0);
+    this->_exitButton.setPosition(this->_window->getSize().x - this->_exitButton.getGlobalBounds().width * 2, 40);
 
     // current player turn display
     this->_currentPlayerText.setFont(this->_fontGeneral);
@@ -39,6 +39,13 @@ Board::Board(sf::RenderWindow *window, Game *currentGame, int *state)
     this->_capturedPiecesText.setCharacterSize(CURR_PLAYER_TEXT_SIZE);
     this->_capturedPiecesText.setFillColor(sf::Color::White);
     this->_capturedPiecesText.setPosition(this->_window->getSize().x - 400, 200);
+
+    // Winner text
+    this->_winnerText.setFont(this->_fontGeneral);
+    this->_winnerText.setString(WINNER_TEXT);
+    this->_winnerText.setCharacterSize(50);
+    this->_winnerText.setFillColor(sf::Color::Green);
+    this->_winnerText.setPosition(this->_window->getSize().x / 2 - this->_winnerText.getGlobalBounds().width / 2, this->_window->getSize().y / 2 - 300);
 
     // Indexes text
     for (int i = 0; i < 16; i++) {
@@ -352,6 +359,42 @@ PieceName Board::promotionMenu(ColorName promotedColor)
             && (clicPosition.y > rookSprite.getPosition().y && clicPosition.y < (rookSprite.getPosition().y + rookSprite.getGlobalBounds().height))) {
                 return Rook;
             }
+        }
+    }
+}
+
+void Board::displayWinner(ColorName winner)
+{
+    sf::Text           playerText;
+    sf::RectangleShape winnerArea(sf::Vector2f(WINDOW_WIDTH - 40, WINDOW_HEIGHT - 40));
+
+    winnerArea.setFillColor(sf::Color(165,42,42,255));
+    winnerArea.setOutlineColor(sf::Color::Green);
+    winnerArea.setOutlineThickness(30);
+    winnerArea.setPosition(20, 20);
+
+    playerText.setFont(this->_fontGeneral);
+    playerText.setCharacterSize(100);
+    playerText.setFillColor(winner == WHITE ? sf::Color::White : sf::Color::Black);
+    playerText.setString(winner == WHITE ? "WHITE" : "BLACK");
+    playerText.setPosition(this->_window->getSize().x / 2 - playerText.getGlobalBounds().width / 2, this->_winnerText.getPosition().y + 200);
+    
+    this->_window->draw(winnerArea);
+    this->_window->draw(this->_winnerText);
+    this->_window->draw(playerText);
+    this->_window->draw(this->_exitButton);
+
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    {
+        sf::Vector2i clicPosition = sf::Mouse::getPosition(*this->_window);
+        sf::Vector2f exitButtonPosition = this->_exitButton.getPosition();
+        sf::FloatRect exitButtonSize = this->_exitButton.getGlobalBounds();
+
+        // We clicked EXIT
+        if ((clicPosition.x >= exitButtonPosition.x && clicPosition.x <= (exitButtonPosition.x + exitButtonSize.width * 2))
+        && (clicPosition.y >= exitButtonPosition.y && clicPosition.y <= (exitButtonPosition.y + exitButtonSize.height * 2)))
+        {
+            *this->_state = EXIT_STATE;
         }
     }
 }

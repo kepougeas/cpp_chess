@@ -78,6 +78,12 @@ int main(int argc, char **argv)
         else if (state == PLAY_STATE) {
             currBoard.drawBoard();
         }
+        else if (state == BLACK_WIN_STATE) {
+            currBoard.displayWinner(BLACK);
+        }
+        else if (state == WHITE_WIN_STATE) {
+            currBoard.displayWinner(WHITE);
+        }
         else if (state == EXIT_STATE) {
             window.close();
         }

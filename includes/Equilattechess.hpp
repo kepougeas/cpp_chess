@@ -34,3 +34,5 @@
 #define MENU_STATE 1
 #define PLAY_STATE 2
 #define EXIT_STATE 3
+#define BLACK_WIN_STATE 4
+#define WHITE_WIN_STATE 5

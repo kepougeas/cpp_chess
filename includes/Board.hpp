@@ -15,6 +15,8 @@
 
 #define CAPTURED_PIECES_TEXT "Captured pieces :"
 
+#define WINNER_TEXT "THE WINNER IS :"
+
 class Board
 {
 public:
@@ -25,6 +27,7 @@ public:
     void drawCapturedPieces();
     void drawIndexes();
     void checkClickEvents();
+    void displayWinner(ColorName);
     PieceName promotionMenu(ColorName);
  private:
     sf::RenderWindow   *_window;
@@ -35,5 +38,6 @@ public:
     sf::Text           _currentPlayerText;
     sf::Text           _capturedPiecesText;
     sf::Text           _indexes[16];
+    sf::Text           _winnerText;
     sf::RectangleShape _chessSquares[8][8];
 };

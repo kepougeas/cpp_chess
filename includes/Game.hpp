@@ -3,6 +3,13 @@
 #include "IPiece.hpp"
 #include <vector>
 
+// DRAW NON COMPLIANCE
+// Stalemate.
+// Dead Position.
+// Mutual Agreement.
+// Threefold Repetition.
+// 50-Move Rule.
+
 // BONUS POINTS
 // TODO: undo a move
 
