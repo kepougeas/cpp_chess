@@ -148,7 +148,7 @@ std::vector<boardPos> Pawn::getPossibleMoves()
     return possibleMoves;
 }
 
-IPiece *Pawn::move(boardPos destPos)
+IPiece *Pawn::move(boardPos destPos, bool simulated)
 {
     IPiece *destPiece = this->_currentGame->getPieceOfPos(destPos);
 
@@ -176,6 +176,7 @@ IPiece *Pawn::move(boardPos destPos)
     }
 
     this->_position = destPos;
+    this->_isFirstMove = simulated ? this->_isFirstMove : false;
 
     return destPiece;
 }

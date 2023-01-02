@@ -153,7 +153,7 @@ void Board::checkClickEvents()
                     // Clic happened on a possible move, so we move the piece
                     // We can only move the piece if it does not put the King in Check
                     if (this->_currentGame->checkNextKingSituation(clickedPiece, currPos) == NORMAL) {
-                        clickedPiece->move(currPos);
+                        clickedPiece->move(currPos, false);
                         if (clickedPiece->getName() == Pawn &&
                             ((clickedPiece->getColor() == WHITE && currPos.x == 0) ||
                             (clickedPiece->getColor() == BLACK && currPos.x == 7))) {

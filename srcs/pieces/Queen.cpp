@@ -6,6 +6,7 @@ Queen::Queen(Game *currentGame, ColorName color, boardPos position)
     this->_currentGame = currentGame;
     this->_color = color;
     this->_position = position;
+    this->_initialPosition = position;
     this->_name = PieceName::Queen;
     this->_displayPiece = new sf::Texture();
     if (!this->_displayPiece->loadFromFile(color == WHITE ? WHITE_QUEEN_IMG : BLACK_QUEEN_IMG)) {
@@ -100,7 +101,7 @@ std::vector<boardPos> Queen::getPossibleMoves()
     return possibleMoves;
 }
 
-IPiece *Queen::move(boardPos destPos)
+IPiece *Queen::move(boardPos destPos, bool simulated)
 {
     IPiece *destPiece = this->_currentGame->getPieceOfPos(destPos);
 
@@ -110,6 +111,7 @@ IPiece *Queen::move(boardPos destPos)
     }
 
     this->_position = destPos;
+    this->_isFirstMove = simulated ? this->_isFirstMove : false;
 
     return destPiece;
 }

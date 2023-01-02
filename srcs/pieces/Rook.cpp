@@ -6,6 +6,7 @@ Rook::Rook(Game *currentGame, ColorName color, boardPos position)
     this->_currentGame = currentGame;
     this->_color = color;
     this->_position = position;
+    this->_initialPosition = position;
     this->_name = PieceName::Rook;
     this->_displayPiece = new sf::Texture();
     if (!this->_displayPiece->loadFromFile(color == WHITE ? WHITE_ROOK_IMG : BLACK_ROOK_IMG)) {
@@ -57,7 +58,7 @@ std::vector<boardPos> Rook::getPossibleMoves()
     return possibleMoves;
 }
 
-IPiece *Rook::move(boardPos destPos)
+IPiece *Rook::move(boardPos destPos, bool simulated)
 {
     IPiece *destPiece = this->_currentGame->getPieceOfPos(destPos);
 
@@ -67,6 +68,7 @@ IPiece *Rook::move(boardPos destPos)
     }
 
     this->_position = destPos;
+    this->_isFirstMove = simulated ? this->_isFirstMove : false;
 
     return destPiece;
 }

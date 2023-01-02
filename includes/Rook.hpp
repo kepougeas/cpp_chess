@@ -12,7 +12,7 @@ public:
     Rook (Game*, ColorName, boardPos);
     virtual ~Rook();
     virtual std::vector<boardPos> getPossibleMoves();
-    virtual IPiece *move(boardPos);
+    virtual IPiece *move(boardPos, bool);
 protected:
     Game     *_currentGame;
 };

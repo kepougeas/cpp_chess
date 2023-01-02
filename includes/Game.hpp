@@ -2,9 +2,6 @@
 
 #include "IPiece.hpp"
 
-// NICE TO HAVE
-// TODO: castling
-
 // BONUS POINTS
 // TODO: capture history for each player
 // TODO: side display of chess compliant indexes

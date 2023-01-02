@@ -69,16 +69,21 @@ checkMateSituation Game::checkNextKingSituation(IPiece *pieceToMove, boardPos ne
     boardPos              savedPiecePosition = pieceToMove->getPosition();
     bool                  savedPieceEnPassant = pieceToMove->getEnPassant();
     
-    // Get the king to check
-    for (IPiece *piece : this->_gamePieces) {
-        if (piece->getName() == King && piece->getColor() == pieceToMove->getColor()) {
-            king = piece;
-            break;
+    // Get the king to check and saving rooks during move simulation
+    if (pieceToMove->getName() == King) {
+        king = pieceToMove;
+    }
+    else {
+        for (IPiece *piece : this->_gamePieces) {
+            if (piece->getName() == King && piece->getColor() == pieceToMove->getColor()) {
+                king = piece;
+                break;
+            }
         }
     }
 
     // Simulate the piece's move
-    pieceToMove->move(nextPosition);
+    pieceToMove->move(nextPosition, true);
 
     // Get the enemy pieces' possibleMoves
     for (IPiece *piece : this->_gamePieces) {
@@ -89,8 +94,9 @@ checkMateSituation Game::checkNextKingSituation(IPiece *pieceToMove, boardPos ne
                     // If enemy has a possible move to the king, we are in check.
                     // Undo our simulated move.
                     this->_gamePieces = savedBoardState;
-                    pieceToMove->move(savedPiecePosition);
+                    pieceToMove->move(savedPiecePosition, true);
                     pieceToMove->setEnPassant(savedPieceEnPassant);
+
                     return CHECK;
                 }
             }
@@ -99,8 +105,9 @@ checkMateSituation Game::checkNextKingSituation(IPiece *pieceToMove, boardPos ne
 
     // If none of the enemy's pieces can attack king, then it is OK
     this->_gamePieces = savedBoardState;
-    pieceToMove->move(savedPiecePosition);
+    pieceToMove->move(savedPiecePosition, true);
     pieceToMove->setEnPassant(savedPieceEnPassant);
+
     return NORMAL;
 }
 

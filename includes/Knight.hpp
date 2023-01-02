@@ -12,7 +12,7 @@ public:
     Knight (Game*, ColorName, boardPos);
     virtual ~Knight();
     virtual std::vector<boardPos> getPossibleMoves();
-    virtual IPiece *move(boardPos);
+    virtual IPiece *move(boardPos, bool);
 protected:
     Game     *_currentGame;
 };

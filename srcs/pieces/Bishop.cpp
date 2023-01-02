@@ -6,6 +6,7 @@ Bishop::Bishop(Game *currentGame, ColorName color, boardPos position)
     this->_currentGame = currentGame;
     this->_color = color;
     this->_position = position;
+    this->_initialPosition = position;
     this->_name = PieceName::Bishop;
     this->_displayPiece = new sf::Texture();
     if (!this->_displayPiece->loadFromFile(color == WHITE ? WHITE_BISHOP_IMG : BLACK_BISHOP_IMG)) {
@@ -67,7 +68,7 @@ std::vector<boardPos> Bishop::getPossibleMoves()
 }
 
 // Returns the captured piece if any, nullptre otherwise
-IPiece *Bishop::move(boardPos destPos)
+IPiece *Bishop::move(boardPos destPos, bool simulated)
 {
     IPiece *destPiece = this->_currentGame->getPieceOfPos(destPos);
 
@@ -77,6 +78,7 @@ IPiece *Bishop::move(boardPos destPos)
     }
 
     this->_position = destPos;
+    this->_isFirstMove = simulated ? this->_isFirstMove : false;
 
     return destPiece;
 }

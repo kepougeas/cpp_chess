@@ -38,9 +38,11 @@ public:
     ~IPiece() { delete this->_displayPiece; };
 
     virtual std::vector<boardPos> getPossibleMoves() = 0;
-    virtual IPiece *move(boardPos) = 0;
+    virtual IPiece *move(boardPos, bool) = 0;
 
     boardPos getPosition() { return this->_position; };
+    bool isFirstMove() { return this->_isFirstMove; };
+    void setFirstMoveState(bool state) { this->_isFirstMove = state; };
     PieceName getName() { return this->_name; };
     ColorName getColor() { return this->_color; };
     void printPossibleMoves();
@@ -51,9 +53,11 @@ public:
 protected:
     PieceName        _name;
     boardPos         _position;
+    boardPos         _initialPosition;
     ColorName        _color;
     sf::Texture      *_displayPiece;
     bool             _enPassant = false;
+    bool             _isFirstMove = true;
 };
 
 inline bool operator==(const boardPos &pos1, const boardPos &pos2)

@@ -12,7 +12,7 @@ public:
     Bishop (Game*, ColorName, boardPos);
     virtual ~Bishop();
     virtual std::vector<boardPos> getPossibleMoves();
-    virtual IPiece *move(boardPos);
+    virtual IPiece *move(boardPos, bool);
 protected:
     Game     *_currentGame;
 };
