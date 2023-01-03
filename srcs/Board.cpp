@@ -297,19 +297,19 @@ PieceName Board::promotionMenu(ColorName promotedColor)
     rookTexture.loadFromFile(promotedColor == WHITE ? WHITE_ROOK_IMG : BLACK_ROOK_IMG);
 
     pawnSprite.setTexture(pawnTexture);
-    pawnSprite.setPosition(menuArea.getPosition().x + 40, menuArea.getPosition().y + 120);
+    pawnSprite.setPosition(menuArea.getPosition().x + 50, menuArea.getPosition().y + 120);
 
     bishopSprite.setTexture(bishopTexture);
-    bishopSprite.setPosition(pawnSprite.getGlobalBounds().width + pawnSprite.getPosition().x + 10, menuArea.getPosition().y + 120);
+    bishopSprite.setPosition(pawnSprite.getGlobalBounds().width + pawnSprite.getPosition().x + 40, menuArea.getPosition().y + 120);
 
     knightSprite.setTexture(knightTexture);
-    knightSprite.setPosition(bishopSprite.getGlobalBounds().width + bishopSprite.getPosition().x + 10, menuArea.getPosition().y + 120);
+    knightSprite.setPosition(bishopSprite.getGlobalBounds().width + bishopSprite.getPosition().x + 40, menuArea.getPosition().y + 120);
 
     queenSprite.setTexture(queenTexture);
-    queenSprite.setPosition(knightSprite.getGlobalBounds().width + knightSprite.getPosition().x + 10, menuArea.getPosition().y + 120);
+    queenSprite.setPosition(knightSprite.getGlobalBounds().width + knightSprite.getPosition().x + 40, menuArea.getPosition().y + 120);
 
     rookSprite.setTexture(rookTexture);
-    rookSprite.setPosition(queenSprite.getGlobalBounds().width + queenSprite.getPosition().x + 10, menuArea.getPosition().y + 120);
+    rookSprite.setPosition(queenSprite.getGlobalBounds().width + queenSprite.getPosition().x + 40, menuArea.getPosition().y + 120);
 
     while (true)
     {

@@ -177,8 +177,8 @@ IPiece *Pawn::move(boardPos destPos, bool simulated)
             // En Passant capture !
             if (!simulated) {
                 this->_currentGame->addCapturedPiece(destPiece);
+                this->_currentGame->removePiece(destPiece);
             }
-            this->_currentGame->removePiece(destPiece);
         }
     }
 
