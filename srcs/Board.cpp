@@ -41,7 +41,7 @@ Board::Board(sf::RenderWindow *window, Game *currentGame, int *state)
     this->_capturedPiecesText.setPosition(this->_window->getSize().x - 400, 200);
 
     // Captured area
-    this->_capturedArea = sf::RectangleShape(sf::Vector2f(WINDOW_WIDTH - 1000, 480));
+    this->_capturedArea = sf::RectangleShape(sf::Vector2f(WINDOW_WIDTH - 1000, 360));
     this->_capturedArea.setFillColor(sf::Color(255, 248, 220, 255));
     this->_capturedArea.setPosition(975, 240);
 
@@ -153,28 +153,28 @@ void Board::drawCapturedPieces()
     this->_window->draw(this->_capturedArea);
 
     for (IPiece *piece : this->_currentGame->getCapturedPieces(WHITE)) {
-        if (widthIndex > 5) {
+        if (widthIndex > 9) {
             widthIndex = 0;
             heightIndex++;
         }
         sf::Sprite sprite;
         sprite.setTexture(*piece->getTexture());
         sprite.scale(sf::Vector2f(0.5, 0.5));
-        sprite.setPosition(widthIndex++ * 60 + (this->_window->getSize().x - 420), heightIndex * 60 + 270);
+        sprite.setPosition(widthIndex++ * 40 + (this->_window->getSize().x - 420), heightIndex * 60 + 300 - sprite.getGlobalBounds().height);
         this->_window->draw(sprite);
     }
 
     widthIndex = 0;
     heightIndex = 0;
     for (IPiece *piece : this->_currentGame->getCapturedPieces(BLACK)) {
-        if (widthIndex > 5) {
+        if (widthIndex > 9) {
             widthIndex = 0;
             heightIndex++;
         }
         sf::Sprite sprite;
         sprite.setTexture(*piece->getTexture());
         sprite.scale(sf::Vector2f(0.5, 0.5));
-        sprite.setPosition(widthIndex++ * 60 + (this->_window->getSize().x - 420), heightIndex * 60 + 470);
+        sprite.setPosition(widthIndex++ * 40 + (this->_window->getSize().x - 420), heightIndex * 60 + 450 - sprite.getGlobalBounds().height);
         this->_window->draw(sprite);
     }
 }
