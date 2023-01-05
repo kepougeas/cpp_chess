@@ -223,6 +223,7 @@ void Board::checkClickEvents()
                         if (clickedPiece == nullptr ||
                         this->_currentGame->getCurrentPlayer() == clickedPiece->getColor()) {
                             this->_currentGame->setSelectedPiece(clickedPiece);
+                            usleep(100000);
                         }
                     }
                 }
