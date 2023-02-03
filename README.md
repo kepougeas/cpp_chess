@@ -1,5 +1,9 @@
 # equi_latte_chess
-Chess Game for Equilateral.io job interview
+Chess Game written in C++
+
+# Features
+Features all the rules of Chess except a draw system, one player must win to end the game.
+Includes special moves
 
 # Compilation
 Need `make` command
